@@ -34,6 +34,12 @@
 		where empno in (select mgr from emp)
 	</select>
 	
+	<insert id="insertEmp" parameterType="Emp">
+		insert into emp values (#{empno}, #{ename}, #{job}, #{mgr}, #{hiredate}, #{sal}, #{comm}, #{deptno})
+	</insert>
 	
+	<delete id="deleteEmp">
+		delete from emp where empno = #{empno}
+	</delete>
 	
 </mapper>

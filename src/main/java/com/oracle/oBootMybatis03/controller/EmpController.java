@@ -8,16 +8,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.oracle.oBootMybatis03.model.Dept;
 import com.oracle.oBootMybatis03.model.Emp;
+import com.oracle.oBootMybatis03.service.DeptService;
 import com.oracle.oBootMybatis03.service.EmpService;
 import com.oracle.oBootMybatis03.service.Paging;
 
 @Controller
 public class EmpController {
-	@Autowired
-	private EmpService es;
+	
+	@Autowired private EmpService es;
+	@Autowired private DeptService ds;
 	
 	/**
 	 * 게시글 목록 조회
@@ -63,7 +66,8 @@ public class EmpController {
 		Emp emp = es.detail(empno);
 		model.addAttribute("emp", emp);
 		return "updateForm";
-	}
+		
+	} 
 	
 	/**
 	 * 게시글 수정 
@@ -84,8 +88,46 @@ public class EmpController {
 		// 관리자사번만 get
 		List<Emp> empList = es.listManager();
 		model.addAttribute("empMngList", empList);
-//		List<Dept> deptList = es.deptSelect();
-//		model.addAttribute("deptList", deptList);
+		// 부서 (코드, 부서명)
+		List<Dept> deptList = ds.deptSelect();
+		model.addAttribute("deptList", deptList);
 		return "writeForm";
 	}
+	
+	/**
+	 * 게시글 작성
+	 */
+	@RequestMapping(value = "write", method = RequestMethod.POST)
+	public String write(Emp emp, Model model) {
+		int result = es.insert(emp);
+		if(result > 0) {
+			return "redirect:list";
+		} else {
+			model.addAttribute("msg", "입력 실패 확인해 보세요");
+			return "forward:writeForm";
+		}
+	}
+	
+	/**
+	 * 중복체크
+	 */
+	@GetMapping(value = "confirm")
+	public String confirm(int empno, Model model) {
+		Emp emp = es.detail(empno);
+		model.addAttribute("empno", empno);
+		if(emp != null) {
+			model.addAttribute("msg", "중복된 사번입니다.");
+			return "forward:writeForm";
+		} else {
+			model.addAttribute("msg", "사용 가능한 사번입니다.");
+			return "forward:writeForm";
+		}
+	}
+	
+	@RequestMapping(value = "delete")
+	public String delete(int empno, Model model) {
+		int result = es.delete(empno);
+		return "redirect:list";
+	}
+	
 }

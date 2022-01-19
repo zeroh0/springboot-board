@@ -11,4 +11,6 @@ public interface EmpDao {
 	Emp detail(int empno);
 	int update(Emp emp);
 	List<Emp> listManager();
+	int insert(Emp emp);
+	int delete(int empno);
 }

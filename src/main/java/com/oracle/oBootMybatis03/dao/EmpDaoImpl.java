@@ -1,7 +1,5 @@
 package com.oracle.oBootMybatis03.dao;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -75,6 +73,9 @@ public class EmpDaoImpl implements EmpDao {
 		return kkk;
 	}
 
+	/**
+	 * 관리자 가져오기
+	 */
 	@Override
 	public List<Emp> listManager() {
 		List<Emp> empList = null;
@@ -84,6 +85,34 @@ public class EmpDaoImpl implements EmpDao {
 			System.out.println("listManager: " + e.getMessage());
 		}
 		return empList;
+	}
+
+	/**
+	 * 게시글 작성
+	 */
+	@Override
+	public int insert(Emp emp) {
+		int result = 0;
+		try {
+			result = session.selectOne("insertEmp", emp);
+		} catch (Exception e) {
+			System.out.println("insert" + e.getMessage());
+		}
+		return result;
+	}
+
+	/**
+	 * 게시글 삭제
+	 */
+	@Override
+	public int delete(int empno) {
+		int result = 0;
+		try {
+			result = session.selectOne("deleteEmp", empno);
+		} catch (Exception e) {
+			System.out.println("delete" + e.getMessage());
+		}
+		return result;
 	}
 	
 }

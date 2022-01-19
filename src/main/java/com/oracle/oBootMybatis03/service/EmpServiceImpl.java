@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oracle.oBootMybatis03.dao.EmpDao;
+import com.oracle.oBootMybatis03.model.Dept;
 import com.oracle.oBootMybatis03.model.Emp;
 
 @Service
@@ -54,14 +55,30 @@ public class EmpServiceImpl implements EmpService {
 	}
 
 	/**
-	 * 매니저 가져오기
+	 * 관리자 가져오기
 	 */
 	@Override
 	public List<Emp> listManager() {
 		List<Emp> empList = ed.listManager();
 		return empList;
 	}
-	
-	
 
+	/**
+	 * 게시글 작성
+	 */
+	@Override
+	public int insert(Emp emp) {
+		int result = ed.insert(emp);
+		return result;
+	}
+
+	/**
+	 * 게시글 삭제
+	 */
+	@Override
+	public int delete(int empno) {
+		int result = ed.delete(empno);
+		return result;
+	} 
+	
 }
