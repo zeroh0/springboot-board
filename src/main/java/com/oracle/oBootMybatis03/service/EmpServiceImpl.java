@@ -6,13 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oracle.oBootMybatis03.dao.EmpDao;
+import com.oracle.oBootMybatis03.dao.EmpDeptDao;
 import com.oracle.oBootMybatis03.model.Dept;
 import com.oracle.oBootMybatis03.model.Emp;
+import com.oracle.oBootMybatis03.model.EmpDept;
 
 @Service
 public class EmpServiceImpl implements EmpService {
-	@Autowired
-	private EmpDao ed;
+	
+	@Autowired private EmpDao ed;
+	@Autowired private EmpDeptDao emd;
 	
 	@Override
 	public int total() {
@@ -79,6 +82,12 @@ public class EmpServiceImpl implements EmpService {
 	public int delete(int empno) {
 		int result = ed.delete(empno);
 		return result;
-	} 
+	}
 	
+	@Override
+	public List<EmpDept> listEmpDept() {
+		List<EmpDept> listEmpDept = emd.listEmpDept();
+		return listEmpDept;
+	} 
+		
 }

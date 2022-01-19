@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.oracle.oBootMybatis03.model.Emp;
+import com.oracle.oBootMybatis03.model.EmpDept;
 //@Repository를 하면 bean을 안 만들어도 됨.
 @Repository
 public class EmpDaoImpl implements EmpDao {

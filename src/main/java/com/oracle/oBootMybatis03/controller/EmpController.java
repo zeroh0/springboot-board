@@ -2,7 +2,15 @@ package com.oracle.oBootMybatis03.controller;
 
 import java.util.List;
 
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.oracle.oBootMybatis03.model.Dept;
 import com.oracle.oBootMybatis03.model.Emp;
+import com.oracle.oBootMybatis03.model.EmpDept;
 import com.oracle.oBootMybatis03.service.DeptService;
 import com.oracle.oBootMybatis03.service.EmpService;
 import com.oracle.oBootMybatis03.service.Paging;
@@ -21,6 +30,7 @@ public class EmpController {
 	
 	@Autowired private EmpService es;
 	@Autowired private DeptService ds;
+	@Autowired private JavaMailSender mailSender;
 	
 	/**
 	 * 게시글 목록 조회
@@ -131,6 +141,46 @@ public class EmpController {
 	public String delete(int empno, Model model) {
 		int result = es.delete(empno);
 		return "redirect:list";
+	}
+	
+	@GetMapping(value="listEmpDept")
+	public String listEmpDept(Model model) {
+		EmpDept empDept = null;
+		System.out.println("EmpController listEmpDept Start...");
+		// Service ,DAO -> listEmpDept
+		// Mapper만 ->TKlistEmpDept
+		List<EmpDept> listEmpDept = es.listEmpDept();
+		model.addAttribute("listEmpDept",listEmpDept);
+		return "listEmpDept";
+	}
+	
+	/**
+	 * 메일 관련
+	 */
+	@RequestMapping(value = "mailTransport")
+	public String mailTransport(HttpServletRequest request, Model model) {
+		String tomail = "boccioni1900@gmail.com"; // 받는 사람 이메일
+		String setfrom = "boccioni1900@gmail.com";
+		String title = "mailTransport입니다.";
+		
+		try {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+			message.setFrom(setfrom); // 보내는 사람 생략하면 정상작동 안함
+			messageHelper.setTo(tomail); // 받는 사람 이메일
+			messageHelper.setSubject(title); // 메일제목 생략 가능
+			String tempPassword = (int) (Math.random() * 999999) + 1 + "";
+			messageHelper.setText("임시 비밀번호입니다 : " + tempPassword); // 메일내용
+			DataSource dataSource = new FileDataSource("/Users/zeroh0/Desktop/log/jung1.jpg");
+			messageHelper.addAttachment(MimeUtility.encodeText("airport.png", "UTF-8", "B"), dataSource); // UTF-8 64bit
+			mailSender.send(message);
+			model.addAttribute("check", 1); // 정상 전달
+//			s.tempPw(u_id, tempPassword);
+		} catch (Exception e) {
+			System.out.println(e);
+			model.addAttribute("check", 2);
+		}
+		return "mailResult";
 	}
 	
 }
