@@ -124,6 +124,9 @@ public class EmpController {
 		}
 	}
 	
+	/**
+	 * 게시글 삭제
+	 */
 	@RequestMapping(value = "delete")
 	public String delete(int empno, Model model) {
 		int result = es.delete(empno);

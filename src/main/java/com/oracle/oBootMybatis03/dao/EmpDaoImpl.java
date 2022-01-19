@@ -66,7 +66,7 @@ public class EmpDaoImpl implements EmpDao {
 	public int update(Emp emp) {
 		int kkk = 0;
 		try {
-			kkk = session.selectOne("tkEmpUpdate", emp);
+			kkk = session.update("tkEmpUpdate", emp);
 		} catch (Exception e) {
 			System.out.println("update" + e.getMessage());
 		}
@@ -94,8 +94,10 @@ public class EmpDaoImpl implements EmpDao {
 	public int insert(Emp emp) {
 		int result = 0;
 		try {
-			result = session.selectOne("insertEmp", emp);
+			result = session.insert("insertEmp", emp);
+			System.out.println("insert result" + result);
 		} catch (Exception e) {
+			System.out.println("insert result" + result);
 			System.out.println("insert" + e.getMessage());
 		}
 		return result;
@@ -108,7 +110,7 @@ public class EmpDaoImpl implements EmpDao {
 	public int delete(int empno) {
 		int result = 0;
 		try {
-			result = session.selectOne("deleteEmp", empno);
+			result = session.delete("deleteEmp", empno);
 		} catch (Exception e) {
 			System.out.println("delete" + e.getMessage());
 		}
