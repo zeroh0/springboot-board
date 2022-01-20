@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.oracle.oBootMybatis03.dao.EmpDao;
 import com.oracle.oBootMybatis03.dao.EmpDeptDao;
-import com.oracle.oBootMybatis03.model.Dept;
 import com.oracle.oBootMybatis03.model.Emp;
 import com.oracle.oBootMybatis03.model.EmpDept;
 
@@ -84,10 +83,13 @@ public class EmpServiceImpl implements EmpService {
 		return result;
 	}
 	
+	/**
+	 * 
+	 */
 	@Override
 	public List<EmpDept> listEmpDept() {
 		List<EmpDept> listEmpDept = emd.listEmpDept();
 		return listEmpDept;
-	} 
+	}
 		
 }

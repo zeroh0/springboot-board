@@ -6,7 +6,7 @@
 		SELECT count(*) FROM emp
 	</select>
 	<!-- https://gent.tistory.com/170 -->
-	<select id="tkEmpListAll3" parameterType="Emp" resultType="Emp">
+	<!-- <select id="tkEmpListAll" parameterType="Emp" resultType="Emp">
 		SELECT *
 		FROM (	
         		SELECT rownum rn, a.*
@@ -14,6 +14,18 @@
         		(SELECT * FROM emp ORDER BY empno) a
      		 )
 		WHERE rn BETWEEN #{start} AND #{end}
+	</select> -->
+	
+	<select id="tkEmpListAll3" parameterType="Emp" resultType="Emp">
+		<![CDATA[
+			SELECT *
+			FROM (	
+	        		SELECT rownum rn, a.*
+	        		FROM 
+	        		(SELECT * FROM emp ORDER BY empno) a
+	     		 )
+			WHERE rn >= #{start} AND rn <= #{end}
+		]]>
 	</select>
 	
 	<select id="tkEmpSelOne" parameterType="int" resultType="Emp" >

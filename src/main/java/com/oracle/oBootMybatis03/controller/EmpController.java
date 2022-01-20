@@ -1,5 +1,6 @@
 package com.oracle.oBootMybatis03.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.activation.DataSource;
@@ -9,6 +10,7 @@ import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.type.filter.AbstractClassTestingTypeFilter;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.oracle.oBootMybatis03.model.Dept;
+import com.oracle.oBootMybatis03.model.DeptVO;
 import com.oracle.oBootMybatis03.model.Emp;
 import com.oracle.oBootMybatis03.model.EmpDept;
 import com.oracle.oBootMybatis03.service.DeptService;
@@ -182,5 +185,53 @@ public class EmpController {
 		}
 		return "mailResult";
 	}
+	
+	/**
+	 * procedure test 입력화면
+	 */
+	@GetMapping("writeDeptIn")
+	public String writeDeptIn(Model model) {
+		return "writeDept3";
+	}
+	
+	/**
+	 * procedure test 입력 후 VO전달
+	 */
+	@PostMapping("writeDept")
+	public String writeDept(DeptVO deptVO, Model model) {
+		ds.insertDept(deptVO);
+		if(deptVO == null) {
+			System.out.println("deptVO null");
+		} else {
+			System.out.println("deptVO.getOdeptno()" + deptVO.getOdeptno());
+			System.out.println("deptVO.getOdname()" + deptVO.getOdname());
+			System.out.println("deptVO.getOloc()" + deptVO.getOloc());
+			model.addAttribute("msg", "정상 입력되었습니다.");
+			model.addAttribute("dept", deptVO);
+		}
+		return "writeDept3";
+	}
+	
+	/**
+	 * 
+	 */
+	@GetMapping(value = "writeDeptCursor")
+	public String writeDeptCursor(Model model) {
+		System.out.println("EmpController writeDeptCursor");
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("sDeptno", 10);
+		map.put("eDeptno", 55);
+		ds.selListDept(map);
+		List<Dept> deptLists = (List<Dept>) map.get("dept");
+		for(Dept dept: deptLists) {
+			System.out.println(dept.getDname());
+			System.out.println(dept.getLoc());
+		}
+		System.out.println(deptLists.size());
+		model.addAttribute("deptList", deptLists);
+		
+		return "writeDeptCursor";
+	}
+	
 	
 }

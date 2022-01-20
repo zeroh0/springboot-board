@@ -9,7 +9,10 @@
 <body>
 <%
 	/* response.sendRedirect("list"); */
-	response.sendRedirect("listEmpDept");
+	/* response.sendRedirect("listEmpDept"); */
+	/* response.sendRedirect("writeDeptIn"); // spring에서 프로시저를 사용하는 방법 */
+	/* response.sendRedirect("writeDeptCursor"); */
+	response.sendRedirect("uploadFormStart");
 %>
 </body>
 </html>
